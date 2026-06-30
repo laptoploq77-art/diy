@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Double Nine 99 Barbershop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --black:#0a0908;
+    --black-2:#141312;
+    --black-3:#1c1a18;
+    --gold:#c9a227;
+    --gold-bright:#e8c766;
+    --gold-dim:#8a6d1f;
+    --cream:#f2ead3;
+    --cream-dim:#bdb6a3;
+    --line: rgba(201,162,39,0.25);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--cream);
+    font-family:'Jost', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Bebas Neue', sans-serif;
+    letter-spacing:2px;
+    color:var(--cream);
+  }
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  .container{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .eyebrow{
+    font-family:'Jost',sans-serif;
+    font-size:13px;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:32px;
+    height:1px;
+    background:var(--gold);
+  }
+  .gold-text{color:var(--gold);}
+  .btn{
+    display:inline-block;
+    padding:16px 38px;
+    font-family:'Jost',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    border-radius:2px;
+    transition:.35s ease;
+    cursor:pointer;
+  }
+  .btn-gold{
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+    color:#0a0908;
+    border:1px solid var(--gold);
+  }
+  .btn-gold:hover{
+    background:transparent;
+    color:var(--gold-bright);
+    box-shadow:inset 0 0 0 1px var(--gold-bright);
+  }
+  .btn-outline{
+    background:transparent;
+    color:var(--cream);
+    border:1px solid rgba(242,234,211,0.4);
+  }
+  .btn-outline:hover{
+    border-color:var(--gold);
+    color:var(--gold-bright);
+  }
+
+  /* NAVBAR */
+  .navbar{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:1000;
+    padding:20px 0;
+    transition:.4s ease;
+    background:rgba(10,9,8,0.15);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid transparent;
+  }
+  .navbar.scrolled{
+    padding:12px 0;
+    background:rgba(10,9,8,0.75);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:26px;
+    letter-spacing:3px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand span{color:var(--gold);}
+  .nav-links{
+    display:flex;
+    gap:42px;
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+  .nav-links a{
+    position:relative;
+    padding-bottom:6px;
+    color:var(--cream-dim);
+    transition:.3s;
+  }
+  .nav-links a::after{
+    content:"";
+    position:absolute;
+    bottom:0;left:0;
+    width:0;height:1px;
+    background:var(--gold);
+    transition:.3s;
+  }
+  .nav-links a:hover{color:var(--cream);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{font-size:13px;}
+  .burger{display:none;font-size:22px;color:var(--gold);cursor:pointer;}
+
+  /* HERO */
+  .hero{
+    position:relative;
+    height:100vh;
+    min-height:680px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;
+    inset:0;
+    background-image:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1920&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center 30%;
+    filter:grayscale(35%) brightness(0.55);
+    transform:scale(1.08);
+  }
+  .hero-overlay{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse at center, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.85) 75%),
+      linear-gradient(180deg, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.25) 35%, rgba(10,9,8,0.9) 100%);
+  }
+  .hero-content{position:relative;z-index:2;max-width:780px;padding:0 24px;}
+  .hero-content .eyebrow{justify-content:center;}
+  .hero-content .eyebrow::before{display:none;}
+  .hero-title{
+    font-size:clamp(48px,9vw,108px);
+    line-height:0.95;
+    margin-bottom:18px;
+  }
+  .hero-title small{
+    display:block;
+    font-size:0.32em;
+    letter-spacing:10px;
+    color:var(--gold);
+    font-family:'Jost',sans-serif;
+    font-weight:500;
+    margin-top:14px;
+  }
+  .hero-sub{
+    font-size:17px;
+    color:var(--cream-dim);
+    max-width:520px;
+    margin:0 auto 36px;
+    line-height:1.7;
+  }
+  .hero-actions{
+    display:flex;
+    gap:18px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .scroll-cue{
+    position:absolute;
+    bottom:34px;left:50%;
+    transform:translateX(-50%);
+    z-index:2;
+    color:var(--gold);
+    font-size:22px;
+    animation:bounce 2.2s infinite;
+  }
+  @keyframes bounce{
+    0%,100%{transform:translate(-50%,0);}
+    50%{transform:translate(-50%,10px);}
+  }
+
+  section{padding:130px 0;position:relative;}
+  .section-head{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 64px;
+  }
+  .section-head h2{font-size:clamp(34px,5vw,56px);}
+  .section-head p{color:var(--cream-dim);margin-top:16px;font-size:15px;line-height:1.7;}
+
+  /* SERVICES */
+  .services{background:var(--black-2);}
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .service-card{
+    background:var(--black);
+    border:1px solid var(--line);
+    padding:48px 36px;
+    position:relative;
+    overflow:hidden;
+    transition:.45s ease;
+  }
+  .service-card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    transform:scaleX(0);
+    transition:.45s ease;
+  }
+  .service-card:hover{
+    transform:translateY(-10px);
+    border-color:var(--gold-dim);
+    box-shadow:0 28px 60px -20px rgba(0,0,0,0.7);
+  }
+  .service-card:hover::before{transform:scaleX(1);}
+  .service-icon{
+    width:58px;height:58px;
+    border:1px solid var(--gold-dim);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    color:var(--gold);
+    margin-bottom:28px;
+    transition:.4s;
+  }
+  .service-card:hover .service-icon{
+    background:var(--gold);
+    color:#0a0908;
+  }
+  .service-card h3{font-size:24px;margin-bottom:12px;letter-spacing:1px;}
+  .service-card p{color:var(--cream-dim);font-size:14px;line-height:1.7;}
+  .service-num{
+    position:absolute;
+    top:24px;right:28px;
+    font-family:'Bebas Neue',sans-serif;
+    font-size:42px;
+    color:rgba(242,234,211,0.06);
+  }
+
+  /* PRICING */
+  .pricing-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border:1px solid var(--line);
+  }
+  .price-card{
+    padding:54px 36px;
+    text-align:center;
+    border-right:1px solid var(--line);
+    position:relative;
+    transition:.4s;
+  }
+  .price-card:last-child{border-right:none;}
+  .price-card.featured{
+    background:linear-gradient(180deg, rgba(201,162,39,0.08), transparent);
+  }
+  .price-tag{
+    position:absolute;
+    top:0;left:50%;
+    transform:translate(-50%,-50%);
+    background:var(--gold);
+    color:#0a0908;
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    padding:6px 18px;
+    font-weight:600;
+  }
+  .price-card h3{
+    font-family:'Jost',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:4px;
+    font-size:14px;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:22px;
+  }
+  .price-amount{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:56px;
+    color:var(--cream);
+    margin-bottom:6px;
+  }
+  .price-amount sup{font-size:20px;color:var(--gold);}
+  .price-card .price-note{font-size:12px;color:var(--cream-dim);letter-spacing:1px;margin-bottom:34px;}
+  .price-list{margin-bottom:38px;text-align:left;display:inline-block;}
+  .price-list li{
+    font-size:14px;
+    color:var(--cream-dim);
+    padding:10px 0;
+    border-bottom:1px solid rgba(242,234,211,0.08);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .price-list li i{color:var(--gold);font-size:12px;}
+
+  .price-categories{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:50px;}
+  .price-cat{
+    background:var(--black-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:30px 34px;
+  }
+  .price-cat h4{
+    font-family:'Bebas Neue',sans-serif;
+    color:var(--gold-bright);
+    font-size:20px;
+    letter-spacing:2px;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--line);
+  }
+  .price-cat ul{display:flex;flex-direction:column;gap:12px;}
+  .price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+  }
+  .price-row .item-name{
+    font-size:14.5px;
+    color:var(--cream);
+    line-height:1.4;
+  }
+  .price-row .item-cost{
+    font-family:'Bebas Neue',sans-serif;
+    color:var(--gold);
+    font-size:17px;
+    white-space:nowrap;
+    letter-spacing:1px;
+  }
+  @media(max-width:700px){
+    .price-categories{grid-template-columns:1fr;}
+    .price-cat{padding:24px;}
+  }
+
+  /* GALLERY */
+  .gallery{background:var(--black-2);}
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-auto-rows:220px;
+    gap:14px;
+  }
+  .gallery-grid .g-item:nth-child(1){grid-column:span 2;grid-row:span 2;}
+  .gallery-grid .g-item:nth-child(4){grid-column:span 2;}
+  .gallery-grid .g-item:nth-child(7){grid-row:span 2;}
+  .g-item{
+    position:relative;
+    overflow:hidden;
+    border-radius:2px;
+  }
+  .g-item img{
+    width:100%;height:100%;
+    object-fit:cover;
+    transition:transform .6s ease, filter .6s ease;
+    filter:grayscale(20%);
+  }
+  .g-item:hover img{transform:scale(1.1);filter:grayscale(0%);}
+  .g-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(0deg, rgba(10,9,8,0.85), transparent 55%);
+    display:flex;
+    align-items:flex-end;
+    padding:18px;
+    opacity:0;
+    transition:.4s;
+  }
+  .g-item:hover .g-overlay{opacity:1;}
+  .g-overlay span{
+    font-family:'Jost',sans-serif;
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--gold-bright);
+  }
+
+  /* CTA BAND */
+  .cta-band{
+    padding:90px 0;
+    text-align:center;
+    background:linear-gradient(135deg, var(--black-3), var(--black));
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .cta-band h2{font-size:clamp(30px,5vw,48px);margin-bottom:18px;}
+  .cta-band p{color:var(--cream-dim);margin-bottom:32px;}
+
+  /* CONTACT INFO STRIP */
+  .info-strip{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+    margin-top:70px;
+    border-top:1px solid var(--line);
+    padding-top:50px;
+  }
+  .info-item{text-align:center;}
+  .info-item i{color:var(--gold);font-size:22px;margin-bottom:14px;}
+  .info-item h4{font-family:'Jost',sans-serif;letter-spacing:2px;text-transform:uppercase;font-size:13px;color:var(--cream);margin-bottom:8px;}
+  .info-item p{color:var(--cream-dim);font-size:14px;line-height:1.6;}
+
+  /* FOOTER */
+  footer{
+    background:var(--black-2);
+    padding:70px 0 0;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr 1fr;
+    gap:50px;
+    padding-bottom:60px;
+    border-bottom:1px solid var(--line);
+  }
+  .footer-grid h4{
+    font-family:'Jost',sans-serif;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-size:13px;
+    color:var(--gold);
+    margin-bottom:22px;
+  }
+  .footer-grid p{color:var(--cream-dim);font-size:14px;line-height:1.8;}
+  .footer-grid ul li{margin-bottom:12px;}
+  .footer-grid ul li a{color:var(--cream-dim);font-size:14px;transition:.3s;}
+  .footer-grid ul li a:hover{color:var(--gold);}
+  .social-row{display:flex;gap:14px;margin-top:20px;}
+  .social-row a{
+    width:38px;height:38px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--cream-dim);
+    transition:.3s;
+  }
+  .social-row a:hover{border-color:var(--gold);color:var(--gold);}
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:26px 0;
+    font-size:13px;
+    color:var(--cream-dim);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .footer-bottom span.gold-text{font-weight:600;}
+
+  @media(max-width:980px){
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .pricing-grid{grid-template-columns:1fr;}
+    .price-card{border-right:none;border-bottom:1px solid var(--line);}
+    .gallery-grid{grid-template-columns:repeat(3,1fr);}
+    .gallery-grid .g-item:nth-child(1){grid-column:span 3;grid-row:span 1;height:260px;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .info-strip{grid-template-columns:1fr;}
+  }
+  @media(max-width:720px){
+    .nav-links{display:none;}
+    .nav-cta{display:none;}
+    .burger{display:block;}
+    .services-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid .g-item:nth-child(1){grid-column:span 2;}
+    .footer-grid{grid-template-columns:1fr;gap:36px;}
+    section{padding:90px 0;}
+    .hero{min-height:600px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="#home" class="brand">99<span>•</span>DOUBLE NINE</a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Layanan</a></li>
+      <li><a href="#pricing">Harga</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Kontak</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-gold nav-cta">Booking</a>
+    <i class="fa-solid fa-bars burger"></i>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Premium Men's Grooming</div>
+    <h1 class="hero-title">DOUBLE NINE <small>99 Barbershop</small></h1>
+    <p class="hero-sub">Presisi dalam setiap potongan. Kenyamanan dalam setiap kunjungan.</p>   
+    <div class="hero-actions">
+      <a href="#pricing" class="btn btn-gold">Lihat Paket Harga</a>
+      <a href="#gallery" class="btn btn-outline">Lihat Gallery</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <div class="eyebrow" style="justify-content:center;">Layanan Kami</div>
+      <h2>Presisi dalam<span class="gold-text"> Setiap Detail</span></h2>
+      <p>Setiap layanan dikerjakan dengan ketelitian tinggi untuk menghadirkan hasil yang rapi, nyaman, dan menyesuaikan karakter serta gaya Anda.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-aos="fade-up" data-aos-delay="0">
+        <span class="service-num">01</span>
+        <div class="service-icon"><i class="fa-solid fa-scissors"></i></div>
+        <h3>Haircut Premium</h3>
+        <p>Perpaduan teknik profesional dan perhatian pada setiap detail untuk menghasilkan potongan rambut yang bersih, rapi, dan elegan.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+        <span class="service-num">02</span>
+        <div class="service-icon"><i class="fa-solid fa-mask-face"></i></div>
+        <h3>Shaving & Beard</h3>
+        <p>Cukur rambut, jenggot, dan kumis dengan teknik profesional, dilengkapi hot towel untuk hasil bersih, rapi, dan nyaman..</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+        <span class="service-num">03</span>
+        <div class="service-icon"><i class="fa-solid fa-pump-soap"></i></div>
+        <h3>Hair Treatment</h3>
+        <p>Perawatan kulit kepala & rambut untuk menjaga kesehatan dan kekuatan rambut jangka panjang.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="0">
+        <span class="service-num">04</span>
+        <div class="service-icon"><i class="fa-solid fa-palette"></i></div>
+        <h3>Hair Coloring</h3>
+        <p>Tampil lebih percaya diri dengan warna rambut yang sesuai kepribadian Anda, menggunakan teknik profesional dan produk berkualitas.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+        <span class="service-num">05</span>
+        <div class="service-icon"><i class="fa-solid fa-child-reaching"></i></div>
+        <h3>Kids Haircut</h3>
+        <p>Potong rambut khusus anak dengan pelayanan ramah, nyaman, dan hasil yang rapi sesuai gaya favorit si kecil..</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+        <span class="service-num">06</span>
+        <div class="service-icon"><i class="fa-solid fa-crown"></i></div>
+        <h3>VIP Member</h3>
+        <p>Akses prioritas, barber pilihan, dan benefit eksklusif untuk member setia Double Nine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <div class="eyebrow" style="justify-content:center;">Paket Harga</div>
+      <h2>Investasi Untuk <span class="gold-text">Penampilanmu</span></h2>
+      <p>Daftar lengkap layanan kami, transparan dan tanpa biaya tersembunyi.</p>
+    </div>
+    <div class="price-categories">
+      <div class="price-cat" data-aos="fade-up">
+        <h4>Anak-anak</h4>
+        <ul>
+          <li class="price-row"><span class="item-name">Potong + Bilas</span><span class="item-cost">40K</span></li>
+        </ul>
+      </div>
+      <div class="price-cat" data-aos="fade-up" data-aos-delay="50">
+        <h4>Dewasa</h4>
+        <ul>
+          <li class="price-row"><span class="item-name">Potong + Bilas</span><span class="item-cost">50K</span></li>
+          <li class="price-row"><span class="item-name">Potong + Creambath</span><span class="item-cost">85K</span></li>
+        </ul>
+      </div>
+      <div class="price-cat" data-aos="fade-up">
+        <h4>Creambath & Masker</h4>
+        <ul>
+          <li class="price-row"><span class="item-name">Creambath</span><span class="item-cost">40K</span></li>
+          <li class="price-row"><span class="item-name">Masker Wajah</span><span class="item-cost">35K</span></li>
+        </ul>
+      </div>
+      <div class="price-cat" data-aos="fade-up" data-aos-delay="50">
+        <h4>Full Service</h4>
+        <ul>
+          <li class="price-row"><span class="item-name">Potong + Keramas + Creambath + Shaving + Masker</span><span class="item-cost">150K</span></li>
+        </ul>
+      </div>
+      <div class="price-cat" data-aos="fade-up">
+        <h4>Hair Color & Perming</h4>
+        <ul>
+          <li class="price-row"><span class="item-name">Hair Color</span><span class="item-cost">100K–400K</span></li>
+          <li class="price-row"><span class="item-name">Perming</span><span class="item-cost">150K–400K</span></li>
+          <li class="price-row"><span class="item-name">Down Perm</span><span class="item-cost">250K–300K</span></li>
+        </ul>
+      </div>
+      <div class="price-cat" data-aos="fade-up" data-aos-delay="50">
+        <h4>Keratin & Shaving</h4>
+        <ul>
+          <li class="price-row"><span class="item-name">Keratin Rambut</span><span class="item-cost">50K</span></li>
+          <li class="price-row"><span class="item-name">Keratin Rambut + Potong</span><span class="item-cost">100K</span></li>
+          <li class="price-row"><span class="item-name">Shaving</span><span class="item-cost">15K–40K</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <div class="eyebrow" style="justify-content:center;">Portfolio</div>
+      <h2>Galeri <span class="gold-text">Hasil</span> Kami</h2>
+      <p>Setiap potongan adalah hasil dari ketelitian, pengalaman, dan sentuhan profesional untuk menghadirkan tampilan yang rapi, tajam, dan sesuai dengan karakter Anda.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="g-item" data-aos="zoom-in"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=900&auto=format&fit=crop" alt="haircut 1"><div class="g-overlay"><span>Fade Cut</span></div></div>
+      <div class="g-item" data-aos="zoom-in" data-aos-delay="50"><img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=600&auto=format&fit=crop" alt="haircut 2"><div class="g-overlay"><span>Beard Trim</span></div></div>
+      <div class="g-item" data-aos="zoom-in" data-aos-delay="100"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=600&auto=format&fit=crop" alt="haircut 3"><div class="g-overlay"><span>Classic Style</span></div></div>
+      <div class="g-item" data-aos="zoom-in" data-aos-delay="150"><img src="https://images.unsplash.com/photo-1599387485043-6f4f5dd23031?q=80&w=900&auto=format&fit=crop" alt="haircut 4"><div class="g-overlay"><span>Signature 99</span></div></div>
+      <div class="g-item" data-aos="zoom-in"><img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=600&auto=format&fit=crop" alt="haircut 5"><div class="g-overlay"><span>Pompadour</span></div></div>
+      <div class="g-item" data-aos="zoom-in" data-aos-delay="50"><img src="https://images.unsplash.com/photo-1635273051839-003bf06a8751?q=80&w=600&auto=format&fit=crop" alt="haircut 6"><div class="g-overlay"><span>Crop Top</span></div></div>
+      <div class="g-item" data-aos="zoom-in" data-aos-delay="100"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=600&auto=format&fit=crop" alt="haircut 7"><div class="g-overlay"><span>Texture Cut</span></div></div>
+      <div class="g-item" data-aos="zoom-in" data-aos-delay="150"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600&auto=format&fit=crop" alt="haircut 8"><div class="g-overlay"><span>VIP Session</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;">Booking</div>
+    <h2>Siap Tampil <span class="gold-text">Lebih Rapi?</span></h2>
+    <p>Datang langsung atau booking lebih dulu lewat Instagram & WhatsApp kami.</p>
+    <div class="hero-actions">
+      <a href="https://www.instagram.com/doublenine_99_barbershop" target="_blank" class="btn btn-gold"><i class="fa-brands fa-instagram"></i>&nbsp; Booking via Instagram</a>
+      <a href="https://wa.me/6285345033322?text=Halo%20Double%20Nine%2099%2C%20saya%20mau%20booking%20potong%20rambut" target="_blank" class="btn btn-outline"><i class="fa-brands fa-whatsapp"></i>&nbsp; Chat WhatsApp</a>
+    </div>
+
+    <div class="info-strip">
+      <div class="info-item" data-aos="fade-up">
+        <i class="fa-solid fa-location-dot"></i>
+        <h4>Lokasi</h4>
+        <p>Jl. Purnama 1, Akcaya<br>Kec. Pontianak Sel., Kota Pontianak<br>Kalimantan Barat 78123</p>
+        <p style="margin-top:10px;"><a href="https://maps.app.goo.gl/CGjBprxC173uxQcb8" target="_blank" class="gold-text" style="text-decoration:underline;">Buka di Google Maps</a></p>
+      </div>
+      <div class="info-item" data-aos="fade-up" data-aos-delay="100">
+        <i class="fa-solid fa-clock"></i>
+        <h4>Jam Buka</h4>
+        <p>Senin – Minggu<br>10.00 – 21.00 WIB</p>
+      </div>
+      <div class="info-item" data-aos="fade-up" data-aos-delay="200">
+        <i class="fa-solid fa-phone"></i>
+        <h4>Kontak</h4>
+        <p><a href="tel:+6285345033322" class="gold-text" style="text-decoration:underline;">+62 853-4503-3322</a><br><a href="https://www.instagram.com/doublenine_99_barbershop" target="_blank" class="gold-text" style="text-decoration:underline;">@doublenine_99_barbershop</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:16px;">99<span>•</span>DOUBLE NINE</div>
+        <p>Pulang Pasti Tampan.</p>
+        <div class="social-row">
+          <a href="https://www.instagram.com/doublenine_99_barbershop" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Layanan</a></li>
+          <li><a href="#pricing">Harga</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Layanan</h4>
+        <ul>
+          <li><a href="#services">Haircut Premium</a></li>
+          <li><a href="#services">Shaving & Beard</a></li>
+          <li><a href="#services">Hair Treatment</a></li>
+          <li><a href="#services">VIP Member</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontak</h4>
+        <ul>
+          <li><a href="tel:+6285345033322">+62 853-4503-3322</a></li>
+          <li><a href="https://maps.app.goo.gl/CGjBprxC173uxQcb8" target="_blank">Jl. Purnama 1, Pontianak Sel.</a></li>
+          <li><a href="https://www.instagram.com/doublenine_99_barbershop" target="_blank">@doublenine_99_barbershop</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 <span class="gold-text">Double Nine 99 Barbershop</span>. All rights reserved.</p>
+      <p>Crafted with <span class="gold-text">precision</span> & gold.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // mobile burger -> simple toggle: smooth-scroll links already work, this just hides menu nicely
+  document.querySelector('.burger')?.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('mobile-open');
+  });
+</script>
+
+</body>
+</html>
