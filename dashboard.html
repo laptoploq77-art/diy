@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bottle Sizes — Gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h3>Bottle Sizes</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Label</th><th>Volume</th><th>Price Modifier</th><th>Actions</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Add Size</h3>
+        <form id="sizeForm">
+          <div class="field">
+            <label>Label</label>
+            <input type="text" id="szLabel" required placeholder="e.g. 75ml">
+          </div>
+          <div class="field">
+            <label>Volume (ml)</label>
+            <input type="number" id="szMl" required min="1" placeholder="75">
+          </div>
+          <div class="field">
+            <label>Price Modifier (Rp)</label>
+            <input type="number" id="szMod" required min="0" placeholder="e.g. 180000">
+            <div class="field-hint">Added on top of the base custom-perfume price.</div>
+          </div>
+          <button type="submit" class="btn btn-gold btn-block">Add Size</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  AdminUI.mount('sizes', 'Bottle Sizes', 'Manage available bottle sizes');
+
+  function render(){
+    const sizes = Store.getSizes();
+    document.getElementById('rows').innerHTML = sizes.map(s=>`
+      <tr>
+        <td><strong>${s.label}</strong></td>
+        <td>${s.ml}ml</td>
+        <td>${s.modifier>0? '+'+Store.fmt(s.modifier) : 'Included'}</td>
+        <td><button class="btn btn-danger btn-sm" data-del="${s.id}">Delete</button></td>
+      </tr>
+    `).join('') || `<tr><td colspan="4" class="text-muted" style="text-align:center;padding:24px;">No sizes yet.</td></tr>`;
+  }
+  document.getElementById('rows').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-del]');
+    if(!btn) return;
+    if(confirm('Delete this size?')){ Store.deleteSize(btn.dataset.del); render(); }
+  });
+  document.getElementById('sizeForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    Store.addSize({
+      label: document.getElementById('szLabel').value.trim(),
+      ml: document.getElementById('szMl').value,
+      modifier: document.getElementById('szMod').value,
+    });
+    e.target.reset();
+    render();
+  });
+  render();
+</script>
+</body>
+</html>

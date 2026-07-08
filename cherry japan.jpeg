@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Reports — gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+
+    <div class="grid grid-4" id="statGrid" style="margin-bottom:26px;"></div>
+
+    <div class="panel">
+      <div class="flex-between">
+        <h3 style="border:none;margin:0;padding:0;">Transactions</h3>
+        <button class="btn btn-gold btn-sm" id="exportBtn">Export Report (CSV)</button>
+      </div>
+      <div class="table-wrap">
+        <table class="tbl">
+          <thead><tr><th>Order #</th><th>Customer</th><th>Date</th><th>Items</th><th>Status</th><th>Total</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  AdminUI.mount('reports', 'Sales Reports', 'Revenue and transaction history');
+
+  const orders = Store.getOrders();
+  const completed = orders.filter(o=>o.status==='Completed');
+  const revenue = orders.filter(o=>o.status!=='Cancelled').reduce((n,o)=>n+o.total,0);
+  const avg = orders.length ? revenue/orders.length : 0;
+
+  document.getElementById('statGrid').innerHTML = [
+    {label:'Total Revenue', value: Store.fmt(revenue)},
+    {label:'Total Orders', value: orders.length},
+    {label:'Completed Orders', value: completed.length},
+    {label:'Average Order Value', value: Store.fmt(avg)},
+  ].map(s=>`<div class="stat-card"><div class="label">${s.label}</div><div class="value">${s.value}</div></div>`).join('');
+
+  document.getElementById('rows').innerHTML = orders.map(o=>`
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.customer.name}</td>
+      <td>${new Date(o.date).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}</td>
+      <td>${o.items.length}</td>
+      <td><span class="badge badge-${o.status.toLowerCase()}">${o.status}</span></td>
+      <td>${Store.fmt(o.total)}</td>
+    </tr>
+  `).join('') || `<tr><td colspan="6" class="text-muted" style="text-align:center;padding:30px;">No transactions yet.</td></tr>`;
+
+  document.getElementById('exportBtn').addEventListener('click', ()=>{
+    const header = ['Order#','Customer','Email','Date','Items','Status','Total'];
+    const rows = orders.map(o=>[o.id,o.customer.name,o.customer.email,new Date(o.date).toISOString().slice(0,10),o.items.length,o.status,o.total]);
+    const csv = [header, ...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'gala-sales-report.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+</script>
+</body>
+</html>

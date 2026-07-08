@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Details — Gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+    <div id="content"></div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  const id = new URLSearchParams(location.search).get('id');
+  const order = Store.getOrder(id);
+  AdminUI.mount('orders', order ? ('Order #'+order.id) : 'Order Not Found', 'Orders / Detail');
+
+  const content = document.getElementById('content');
+  if(!order){
+    content.innerHTML = `<div class="empty"><h3>Order not found</h3><a href="orders.html" class="btn btn-gold">Back to Orders</a></div>`;
+  } else {
+    content.innerHTML = `
+      <div class="two-col">
+        <div>
+          <div class="panel">
+            <h3>Customer Information</h3>
+            <p><strong>Name:</strong> ${order.customer.name}</p>
+            <p><strong>Email:</strong> ${order.customer.email}</p>
+            <p><strong>Phone:</strong> ${order.customer.phone || '—'}</p>
+            <p><strong>Address:</strong><br>${order.customer.address || '—'}</p>
+          </div>
+          <div class="panel">
+            <h3>Order Items</h3>
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+                <tbody>
+                  ${order.items.map(i=>`
+                    <tr>
+                      <td>${i.name}${i.meta? `<div class="text-muted" style="font-size:.76rem;">${i.meta.notes?.join(', ')||''} ${i.meta.size?'· '+i.meta.size:''}</div>`:''}</td>
+                      <td>${i.qty}</td>
+                      <td>${Store.fmt(i.unit_price)}</td>
+                      <td>${Store.fmt(i.unit_price*i.qty)}</td>
+                    </tr>`).join('')}
+                </tbody>
+                <tfoot><tr><td colspan="3" style="text-align:right;font-weight:800;">Total:</td><td style="font-weight:800;color:var(--gold-dim);">${Store.fmt(order.total)}</td></tr></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="panel">
+            <h3>Order Status</h3>
+            <div class="field">
+              <select id="statusSelect">
+                ${['Pending','Processing','Completed','Cancelled'].map(s=>`<option ${s===order.status?'selected':''}>${s}</option>`).join('')}
+              </select>
+            </div>
+            <button class="btn btn-gold btn-block" id="saveStatus">Update Status</button>
+          </div>
+          <div class="panel">
+            <h3>Payment Proof</h3>
+            ${order.paymentProof
+              ? `<img src="${order.paymentProof}" alt="Payment proof" style="width:100%;border-radius:6px;border:1px solid var(--line);">`
+              : `<p class="text-muted">No payment proof uploaded.</p>`}
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('saveStatus').addEventListener('click', ()=>{
+      const status = document.getElementById('statusSelect').value;
+      Store.updateOrderStatus(order.id, status);
+      document.getElementById('saveStatus').textContent = 'Updated ✓';
+      setTimeout(()=>location.reload(), 600);
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products — Gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+
+    <div class="panel">
+      <div class="flex-between">
+        <h3 style="border:none;margin:0;padding:0;">All Products</h3>
+        <a href="products-create.html" class="btn btn-gold btn-sm">+ Add Product</a>
+      </div>
+      <div class="table-wrap">
+        <table class="tbl">
+          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  AdminUI.mount('products', 'Products', 'Manage catalog products');
+
+  function render(){
+    const products = Store.getProducts();
+    document.getElementById('rows').innerHTML = products.map(p=>`
+      <tr>
+        <td style="display:flex;align-items:center;gap:10px;">
+          <span style="width:14px;height:14px;border-radius:3px;background:${p.accent};display:inline-block;"></span>
+          <strong>${p.name}</strong>
+        </td>
+        <td>${p.category}</td>
+        <td>${Store.fmt(p.price)}</td>
+        <td>${p.stock}</td>
+        <td><button class="btn btn-danger btn-sm" data-del="${p.id}">Delete</button></td>
+      </tr>
+    `).join('') || `<tr><td colspan="5" class="text-muted" style="text-align:center;padding:30px;">No products yet.</td></tr>`;
+  }
+  document.getElementById('rows').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-del]');
+    if(!btn) return;
+    if(confirm('Delete this product?')){ Store.deleteProduct(btn.dataset.del); render(); }
+  });
+  render();
+</script>
+</body>
+</html>

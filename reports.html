@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Product — Gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+
+    <div class="panel" style="max-width:640px;">
+      <h3>Add New Product</h3>
+      <form id="prodForm">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" id="pName" required placeholder="e.g. Velvet Amber">
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="pCategory" required>
+            <option value="">Select Category</option>
+            <option>Woody</option><option>Citrus</option><option>Floral</option>
+            <option>Oriental</option><option>Aquatic</option><option>Spicy</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Description / Notes</label>
+          <textarea id="pNotes" required placeholder="Describe the scent profile"></textarea>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label>Price (Rp)</label>
+            <input type="number" id="pPrice" required min="0" placeholder="e.g. 400000">
+          </div>
+          <div class="field">
+            <label>Stock</label>
+            <input type="number" id="pStock" required min="0" placeholder="e.g. 20">
+          </div>
+        </div>
+        <div class="field">
+          <label>Image URL / Path</label>
+          <input type="text" id="pImage" placeholder="e.g. image/my-product.jpeg">
+          <div class="field-hint">Optional. Path or URL to a product photo. Leave empty to use the generated bottle illustration instead.</div>
+        </div>
+        <div class="field">
+          <label>Accent Color</label>
+          <input type="color" id="pAccent" value="#c9a256" style="height:44px;padding:4px;">
+          <div class="field-hint">Used to tint the generated bottle illustration when no image is set.</div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="submit" class="btn btn-gold">Save Product</button>
+          <a href="products.html" class="btn btn-line">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  AdminUI.mount('products', 'Add Product', 'Products / Add New');
+  document.getElementById('prodForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    Store.addProduct({
+      name: document.getElementById('pName').value.trim(),
+      category: document.getElementById('pCategory').value,
+      notes: document.getElementById('pNotes').value.trim(),
+      price: document.getElementById('pPrice').value,
+      stock: document.getElementById('pStock').value,
+      accent: document.getElementById('pAccent').value,
+      image: document.getElementById('pImage').value.trim(),
+    });
+    location.href = 'products.html';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aromas — Gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+
+    <div class="panel">
+      <div class="flex-between">
+        <h3 style="border:none;margin:0;padding:0;">Aroma Notes</h3>
+        <a href="aromas-create.html" class="btn btn-gold btn-sm">+ Add Aroma</a>
+      </div>
+      <p class="text-muted" style="margin-top:-8px;font-size:.85rem;">These notes power the Custom Perfume Builder on the storefront.</p>
+      <div class="table-wrap">
+        <table class="tbl">
+          <thead><tr><th>Name</th><th>Category</th><th>Description</th><th>Actions</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  AdminUI.mount('aromas', 'Aromas', 'Manage fragrance notes');
+
+  function render(){
+    const aromas = Store.getAromas();
+    document.getElementById('rows').innerHTML = aromas.map(a=>`
+      <tr>
+        <td><strong>${a.name}</strong></td>
+        <td><span class="badge badge-processing">${a.category}</span></td>
+        <td class="text-muted">${a.description||'—'}</td>
+        <td><button class="btn btn-danger btn-sm" data-del="${a.id}">Delete</button></td>
+      </tr>
+    `).join('') || `<tr><td colspan="4" class="text-muted" style="text-align:center;padding:30px;">No aromas yet.</td></tr>`;
+  }
+  document.getElementById('rows').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-del]');
+    if(!btn) return;
+    if(confirm('Delete this aroma?')){ Store.deleteAroma(btn.dataset.del); render(); }
+  });
+  render();
+</script>
+</body>
+</html>

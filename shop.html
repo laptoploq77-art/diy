@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Gala Parfume</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div data-nav></div>
+
+<div class="page-head">
+  <div class="wrap">
+    <h1>Shop the Collection</h1>
+    <div class="crumb">Home / Shop</div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="flex-between" style="margin-bottom:26px;">
+      <div class="chips" id="categoryFilters"></div>
+      <span class="text-muted" id="resultCount" style="font-size:.85rem;"></span>
+    </div>
+    <div class="grid grid-3" id="shopGrid"></div>
+  </div>
+</section>
+
+<div data-footer></div>
+
+<script src="js/store.js"></script>
+<script src="js/ui.js"></script>
+<script>
+  UI.mountChrome('', 'shop');
+
+  const products = Store.getProducts();
+  const cats = ['All', ...new Set(products.map(p=>p.category))];
+  let activeCat = 'All';
+
+  function renderFilters(){
+    document.getElementById('categoryFilters').innerHTML = cats.map(c=>
+      `<label class="chip ${c===activeCat?'checked':''}" data-cat="${c}">${c}</label>`
+    ).join('');
+  }
+
+  function renderGrid(){
+    const list = activeCat==='All' ? products : products.filter(p=>p.category===activeCat);
+    document.getElementById('resultCount').textContent = list.length + ' fragrances';
+    document.getElementById('shopGrid').innerHTML = list.map(p => `
+      <div class="card-prod">
+        <div class="thumb">${UI.productThumb(p)}</div>
+        <div class="body">
+          <div class="eyebrow" style="color:var(--gold-dim);">${p.category}</div>
+          <div class="name">${p.name}</div>
+          <div class="notes">${p.notes}</div>
+          <div class="price">${Store.fmt(p.price)} <span class="text-muted" style="font-weight:400;font-size:.78rem;">· ${p.stock} in stock</span></div>
+          <div class="row-actions">
+            <button class="btn btn-gold btn-sm btn-block" data-add="${p.id}">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    `).join('') || `<div class="empty" style="grid-column:1/-1;">No products in this category.</div>`;
+  }
+
+  document.getElementById('categoryFilters').addEventListener('click', e=>{
+    const chip = e.target.closest('[data-cat]');
+    if(!chip) return;
+    activeCat = chip.dataset.cat;
+    renderFilters(); renderGrid();
+  });
+
+  document.getElementById('shopGrid').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-add]');
+    if(!btn) return;
+    const p = Store.getProduct(btn.dataset.add);
+    Store.addToCart({type:'product', productId:p.id, name:p.name, unit_price:p.price, qty:1});
+    UI.mountChrome('', 'shop');
+    btn.textContent = 'Added ✓';
+    setTimeout(()=>btn.textContent='Add to Cart', 1000);
+  });
+
+  renderFilters();
+  renderGrid();
+</script>
+</body>
+</html>

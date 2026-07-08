@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Aroma — Gala Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="admin-shell">
+  <div data-admin-sidebar></div>
+  <main class="admin-main">
+    <div class="admin-topbar" data-admin-topbar></div>
+
+    <div class="panel" style="max-width:560px;">
+      <h3>Add New Aroma</h3>
+      <form id="aromaForm">
+        <div class="field">
+          <label>Aroma Name</label>
+          <input type="text" id="aName" required placeholder="e.g. Cedarwood">
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="aCategory" required>
+            <option value="">Select Category</option>
+            <option>Top Note</option>
+            <option>Heart Note</option>
+            <option>Base Note</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="aDesc" placeholder="Short description of this note"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="submit" class="btn btn-gold">Save Aroma</button>
+          <a href="aromas.html" class="btn btn-line">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="js/admin-ui.js"></script>
+<script>
+  AdminUI.mount('aromas', 'Add Aroma', 'Aromas / Add New');
+  document.getElementById('aromaForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    Store.addAroma({
+      name: document.getElementById('aName').value.trim(),
+      category: document.getElementById('aCategory').value,
+      description: document.getElementById('aDesc').value.trim(),
+    });
+    location.href = 'aromas.html';
+  });
+</script>
+</body>
+</html>
